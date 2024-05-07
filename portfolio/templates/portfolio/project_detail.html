@@ -1,0 +1,149 @@
+{% extends parent_template|default:"navbar.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<!-- home 2 -->
+        <section class="mh-home image-bg home-2-img" id="mh-home">
+            <div class="img-foverlay img-color-overlay">
+                <div class="container">
+                    <div class="row section-separator">
+                        <div class="mh-page-title text-center col-sm-12">
+                            <h2>Project Detail</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mh-blog">
+            <div class="container">
+                <div class="row section-separator">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="mh-blog-item dark-bg blog-single">
+                                    {% for image in project.project_images.all|slice:1 %}<img src="{{ image.image.url }}" alt="" class="img-fluid">{% endfor %}
+                                    <div class="blog-inner">
+                                        <h2><a href="#">{{ project.name|upper }}</a></h2>
+                                       <p>
+                                           {{ project.description }}
+                                        </p>                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="btn btn-fill wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.4s">Live Demo</a>     
+                                  
+                            <!-- Comments-->
+                            <div class="col-sm-12">
+                                <div class="comments col-sm-12">
+                                    {% for comment in project.project_comments.all %}
+                                    <div class="single-comment media">
+                                        <img src="assets/images/b-author.jpg" alt="" class="img-fluid round-image"> 
+                                        <div class="col-md-10 col-sm-10 comment-details media-body">
+                                            <h4> {{ comment.name|title }} </h4>
+                                            <span>{{ comment.created|date:"M j, Y" }}</span>
+                                            <p>{{ comment.message }}</p>
+                                            <div class="mh-blog-next-prev-post col-md-6 text-right">
+                                                <a href="{% url "portfolio:project_reply" comment.id %}">Reply</a>
+                                            </div>
+                                            {% for reply in comment.project_comment_replies.all %}
+                                            <div class="clearfix"></div>
+                                            <div class="single-comment media col-sm-10 pull-right">
+                                                <img src="assets/images/b-author.jpg" alt="" class="img-fluid round-image"> 
+                                                <div class="col-md-10 col-sm-10 comment-details media-body">
+                                                    <h4> {{ reply.name }} </h4>
+                                                    <span>{{ reply.created|date:"M j, Y" }}</span>
+                                                    <p>{{ reply.message }}</p>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    
+                                    {% endfor %}
+                                    
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="blog-form-inner col-sm-12">
+                                    <div class="post-comment-title">
+                                        <h3>Post your comment</h3>
+                                    </div>
+                                    <form action="{% url "portfolio:project_comment" project.id %}" method="post" id="contact-form" class="single-form comment-form wow fadeIn" data-wow-offset="30" data-wow-duration="1.5s" data-wow-delay="0.15s">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <input name="name" class="contact-name form-control" id="contact-name" type="text" placeholder="Name" required="">
+                                            </div>
+            
+                                            <div class="col-sm-12">
+                                                <input name="website" class="contact-subject form-control" id="contact-email" type="text" placeholder="Your Website">
+                                            </div>                               
+                                            
+                                            <div class="col-sm-12">
+                                                <input name="email" class="contact-subject form-control" id="contact-email" type="email" placeholder="Your Email" required="">
+                                            </div>
+            
+                                            <div class="col-sm-12">
+                                                <textarea name="message" class="contact-message" id="message" rows="6" placeholder="Your Message" required></textarea>
+                                            </div>
+                                            
+                                            <!-- Subject Button -->
+                                            <div class="btn-form col-sm-12">
+                                                <button class="btn btn-fill"> Post Comment </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- SIDEBAR -->
+                    <div class="col-md-4">
+                        <div class="mh-blog-sidebar">
+                            <div class="sidebar-item mh-author-info">
+                                <div class="mh-author-img">
+                                    <div class="img-border">
+                                        <img src="{% static "assets/images/hero.jpg" %}" alt="" class="img-fluid">
+                                    </div>
+                                </div>
+                                <h2>Jegede Olajide</h2>
+                                <h4>Web Developer</h4>
+                                <p>
+                                    a self-taught, Enthusiastic and self-motivated web developer with over two years of hands-on learning and building experience in Django web development.
+                                 Eager to transition from academic projects to real-world applications, bringing a strong foundation in programming principles and a passion for creating functional and visually appealing websites. Proven ability to quickly learn new technologies and adapt to evolving industry standards.
+                                 Currently seeking opportunities to contribute to dynamic projects and gain professional experience in the field.
+                                </p>
+                                <ul class="social-icon">
+                                    <li><a href="#"><i class="fa fa-whatsapp"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-github"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="sidebar-item mh-blog-category">
+                                <h3>Category</h3>
+                                <ul>
+                                    <li><a href="#">{{ project.category.name|title }}</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="sidebar-item mh-blog-category">
+                                <h3>Langages</h3>
+                                <ul>
+                                    {% for language in project.languages.all %}
+                                    <li><a href="#">{{ language.name|upper }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+            </div>
+        </section>       
+{% endblock %}
